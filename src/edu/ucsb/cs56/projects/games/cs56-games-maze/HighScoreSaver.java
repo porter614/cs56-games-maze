@@ -68,9 +68,7 @@ public class HighScoreSaver{
 
 
     try{
-      System.out.println(">BEGIN");
       instream = new FileInputStream(myFile);
-      System.out.println(">END");
       osi = new ObjectInputStream(instream);
       savedScores = new ArrayList<MazeHighScore>();
       // read high scores until exception
@@ -95,7 +93,6 @@ public class HighScoreSaver{
       return null;
     }finally{
       osi.close();
-      System.out.println("Successfully returning Arraylist of size " + savedScores.size());
       return savedScores;
     }
 

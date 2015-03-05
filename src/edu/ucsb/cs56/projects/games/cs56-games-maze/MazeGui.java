@@ -380,13 +380,15 @@ public class MazeGui implements ActionListener{
 	   // When the Save option is selected from the menu...
     timerBar.stopTimer();
 	  realTime = timerBar.getTimeElapsed(); // records ACTUAL time when save button is pressed
-
+    String gameSaveTAG = JOptionPane.showInputDialog(this.frame,"Enter Tag","Enter a Tag for this Game:");
 		player=null;;
 		this.mc.setVisible(false);
     // Save Game to .ser file
     try{
     MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
     myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,"HENDRIX"));
+
+
     }catch( IOException Ex){ Ex.printStackTrace();}
 
 		// Set an onscreen message to guide user after
@@ -428,7 +430,7 @@ public class MazeGui implements ActionListener{
     try{ // save game
 
       MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
-      myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,"MARTIN"));
+      myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTAG));
 
     }catch(IOException ioe){ ioe.printStackTrace(); }
 
@@ -442,7 +444,7 @@ public class MazeGui implements ActionListener{
       currentScoreList.add(new MazeHighScore(name,realTime,settings.rows,settings.cols));
       mySaver.writeHighScoreList(currentScoreList);
 
-      System.out.println("High Score Objects stored= "+currentScoreList.size());
+      System.out.println("+1 High Score Objects stored= "+currentScoreList.size());
 
     }catch(IOException ioe){ ioe.printStackTrace(); }
 

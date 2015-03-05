@@ -68,9 +68,7 @@ public class MazeGameSaver{
 
 
       try{
-        System.out.println(">BEGIN");
         instream = new FileInputStream(myFile);
-        System.out.println(">END");
         osi = new ObjectInputStream(instream);
         savedMazeGames = new ArrayList<MazeGameSave>();
         // read Game Saves until EOF exception
@@ -95,8 +93,6 @@ public class MazeGameSaver{
         return null;
       }finally{
         osi.close();
-        System.out.println
-        ("Successfully returning GameSave Arraylist of size "+savedMazeGames.size());
         return savedMazeGames;
       }
 
@@ -114,6 +110,7 @@ public class MazeGameSaver{
         currentGameSaves.add(thisGameSave);
         // write array  back to save file
         this.writeGameListToFile(currentGameSaves);
+        System.out.println("+1 Game Save Objects stored; Current Size= "+currentGameSaves.size());
 
       }catch (IOException E){
         E.printStackTrace();
