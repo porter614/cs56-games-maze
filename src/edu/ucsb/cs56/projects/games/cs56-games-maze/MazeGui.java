@@ -92,7 +92,7 @@ public class MazeGui implements ActionListener{
 	this.frame = new JFrame();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setTitle("Maze Game");
-	
+
 	//initialize timer/controls bar
 	this.timerBar = new MazeTimerBar(this);
 	frame.add(timerBar, BorderLayout.SOUTH);
@@ -161,13 +161,13 @@ public class MazeGui implements ActionListener{
 	//init settings Dialog
 	settingsDialog = new MazeSettingsDialog(settings, this);
 	settingsDialog.setLocationRelativeTo(frame);
-
+  /*
 	//init file chooser window
 	fc = new JFileChooser();
 	fileFilter = new FileNameExtensionFilter("MazeGame saves (*.mzgs)", "mzgs");
 	fc.addChoosableFileFilter(fileFilter);
 	fc.setFileFilter(fileFilter);
-
+  */
     }
 
 
@@ -377,62 +377,31 @@ public class MazeGui implements ActionListener{
 	    settings.progReveal=button.getModel().isSelected();
 	}
 	else if("save".equals(e.getActionCommand())){
-	    timerBar.stopTimer();
-	    realTime = timerBar.getTimeElapsed(); // records ACTUAL time when save button is pressed
-	    //prompt user and write to file
-	    int returnVal = fc.showSaveDialog(this.frame);
-	    if(returnVal == JFileChooser.APPROVE_OPTION){
-		File file;
-		//System.out.println(fc.getSelectedFile().toString());
-		if(fc.getSelectedFile().toString().length()>=5 && fc.getSelectedFile().toString().substring(fc.getSelectedFile().toString().length()-5).equals(".mzgs"))
-		    file = fc.getSelectedFile();
-		else
-		    file = new File(fc.getSelectedFile()+".mzgs");
-		FileOutputStream fout;
-		ObjectOutputStream oout;
-		try{
-		    fout = new FileOutputStream(file);
-		    oout = new ObjectOutputStream(fout);
-		    if(this.gameSave == null){
-			oout.writeObject(new MazeGameSave(this.grid, this.oldSettings,this.player,realTime));
-		    }
-		    else{
-			this.gameSave.setTimeElapsed(realTime); // saves ACTUAL time to file
-			oout.writeObject(this.gameSave);
-		    }
-		    oout.close();
-		    fout.close();
-		}
-		catch(IOException ioe){ ioe.printStackTrace(); }
-		player=null;
+	   // When the Save option is selected from the menu...
+    timerBar.stopTimer();
+	  realTime = timerBar.getTimeElapsed(); // records ACTUAL time when save button is pressed
+
+		player=null;;
 		this.mc.setVisible(false);
+    // Save Game to .ser file
+    try{
+    MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
+    myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,"HENDRIX"));
+    }catch( IOException Ex){ Ex.printStackTrace();}
 
 		// Set an onscreen message to guide user after
 		// previous Maze is saved.
 		JOptionPane.showMessageDialog(frame,"To start new game press OK then New.",
 					      "Maze Saved", JOptionPane.INFORMATION_MESSAGE);
-	    }
-	}
+  }
 	else if("load".equals(e.getActionCommand())){
-	    int returnVal = fc.showOpenDialog(this.frame);
-	    if(returnVal == JFileChooser.APPROVE_OPTION){
-		File file = fc.getSelectedFile();
-		FileInputStream fin;
-		ObjectInputStream oin;
-		try{
-		    fin = new FileInputStream(file);
-		    oin = new ObjectInputStream(fin);
-		    MazeGameSave game = (MazeGameSave)oin.readObject();
-		    oin.close();
-		    fin.close();
-		    this.gameSave = game;
-		    newMaze(game); // this "restarts" the game from load point
-		    // newMaze(); // this creates a "new" game, like the button advertises
-		}
-		catch(IOException | ClassNotFoundException ex){
-		    System.err.println("Invalid file specified.");
-		    ex.printStackTrace(); }
-	    }
+    // if user selects to load game
+
+
+
+
+
+
 	}
 
     }
@@ -487,11 +456,10 @@ public class MazeGui implements ActionListener{
     currentScoreList.add(new MazeHighScore(name,realTime,settings.rows,settings.cols));
     mySaver.writeHighScoreList(currentScoreList);
 
-    System.out.println("Top Player: "+currentScoreList.get(0).getName()+ " with Score: "+currentScoreList.get(0).getTime());
-    System.out.println("Arr Size= "+currentScoreList.size());
+    System.out.println("High Score Objects stored= "+currentScoreList.size());
 
   }catch(IOException ioe){ ioe.printStackTrace(); }
-  
+
 
 	this.player=null;
 }}
@@ -552,12 +520,12 @@ public class MazeGui implements ActionListener{
 			frame.add(pauseArea);
 		    }
 		    frame.repaint();
-		    frame.setVisible(true);		    
+		    frame.setVisible(true);
 		    if(!isPaused) isPaused = true;
 		    else isPaused = false;
 		    return;
 		}
-		    
+
 	    mc.repaint();
 	    if(grid.isAtFinish(player.getPosition())) wonMaze();
 	    }
@@ -568,5 +536,5 @@ public class MazeGui implements ActionListener{
 	}
     }
 
-    
+
 }

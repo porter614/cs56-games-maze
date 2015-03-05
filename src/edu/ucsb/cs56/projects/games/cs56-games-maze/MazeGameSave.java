@@ -10,6 +10,7 @@ import java.util.Collections;
     Always saves maze configuration and associated settings.
 
 @author Evan West
+@author Zak Blake
 @version CS56 S13 UCSB
  */
 public class MazeGameSave implements Serializable{
@@ -19,6 +20,7 @@ public class MazeGameSave implements Serializable{
     private MazePlayer player;
     private long timeElapsed;
     private ArrayList<MazeHighScore> scores;
+    private String storageTag;
 
 
     /** Constructor for save game object, player moved back to start, use for win state
@@ -30,20 +32,35 @@ public class MazeGameSave implements Serializable{
 	this(grid,settings,new MazePlayer(grid),0);
     }
 
-
+    /** Constructor for save game object, stores player position
+    @param grid Object representing the maze layout grid
+    @param settings Settings which the grid must be played with
+    @param player Player position and state to store
+    @param elapsed Time elapsed during current gameplay instance
+    */
+    public MazeGameSave(MazeGrid grid, MazeSettings settings, MazePlayer player, long timeElapsed)
+    {
+      this.grid = grid;
+      this.settings = settings;
+      this.player = player;
+      this.scores = new ArrayList<MazeHighScore>();
+      this.timeElapsed=timeElapsed;
+    }
     /** Constructor for save game object, stores player position
 	@param grid Object representing the maze layout grid
 	@param settings Settings which the grid must be played with
 	@param player Player position and state to store
 	@param elapsed Time elapsed during current gameplay instance
+  @param tag to identify game to user when load is chosen
      */
-    public MazeGameSave(MazeGrid grid, MazeSettings settings, MazePlayer player, long timeElapsed)
+    public MazeGameSave(MazeGrid grid, MazeSettings settings, MazePlayer player, long timeElapsed, String sTag)
     {
 	this.grid = grid;
 	this.settings = settings;
 	this.player = player;
 	this.scores = new ArrayList<MazeHighScore>();
 	this.timeElapsed=timeElapsed;
+  this.storageTag= sTag;
     }
 
     /** Adds a new score for this maze, then resorts array of scores so high score always on top

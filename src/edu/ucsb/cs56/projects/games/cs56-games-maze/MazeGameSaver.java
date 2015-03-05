@@ -102,6 +102,27 @@ public class MazeGameSaver{
 
 
     }
+    // use existing save function to read file to arraylist, write to arraylist and write back to file
+    public void AddGameSaveToList(MazeGameSave thisGameSave) throws IOException{
+      try{
+
+        ArrayList<MazeGameSave> currentGameSaves = new ArrayList<MazeGameSave>();
+        if (this.hasEmptyFile()==false){ // avoid reading from empty file
+          currentGameSaves = this.getSavedGameList();
+        }
+        // store current maze settings to array
+        currentGameSaves.add(thisGameSave);
+        // write array  back to save file
+        this.writeGameListToFile(currentGameSaves);
+
+      }catch (IOException E){
+        E.printStackTrace();
+      }
+
+
+
+
+    }
 
 
 
