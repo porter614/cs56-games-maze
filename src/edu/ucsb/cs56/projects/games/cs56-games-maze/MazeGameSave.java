@@ -19,7 +19,7 @@ public class MazeGameSave implements Serializable{
     private MazeSettings settings;
     private MazePlayer player;
     private long timeElapsed;
-    private MazeHighScore currentMazeHighScore;
+    private MazeHighScore currentMazeHighScore=null;
     private String storageTag="";
 
 

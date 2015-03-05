@@ -51,8 +51,7 @@ public class MazeGui implements ActionListener{
     public static void main(final String[] args){
 	SwingUtilities.invokeLater(new Runnable(){
 		public void run(){
-		    MazeGui myMazeGui = new MazeGui(args);
-        myMazeGui.run();
+		    new MazeGui(args).run();
 		}
 	    });
     }
@@ -329,7 +328,7 @@ public class MazeGui implements ActionListener{
 	    frame.pack();
 	    frame.setVisible(true);
 	    this.player=game.getPlayer();
-	    if(game.hasHighScores()){
+	    if(game.getHighScore() != null){
 		JOptionPane.showMessageDialog(this.frame, "This maze was completed in:\n "+game.getHighScore().getTime()/1000.0+" by "+game.getHighScore().getName()+" \n Can you do better?");
 	    }
 	    if (settings.progReveal) run(true);
@@ -381,7 +380,7 @@ public class MazeGui implements ActionListener{
     // Save Game to .ser file
     try{
     MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
-    myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,"HENDRIX"));
+    myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTAG));
 
 
     }catch( IOException Ex){ Ex.printStackTrace();}
@@ -395,9 +394,9 @@ public class MazeGui implements ActionListener{
     // if user selects to load game
     // prompt user to select what game they want, check if it is a completed maze or not
     // load the maze grid and such based on if they will be competing against a past score
-    // or completing a previous maze
+    // or completing a previous mazes
     try{
-      LoadWindow myLoadWindow = new LoadWindow();
+      LoadWindow myLoadWindow = new LoadWindow(this);
     }catch(IOException E){
       E.printStackTrace();
     }
@@ -425,21 +424,22 @@ public class MazeGui implements ActionListener{
 	if(choice == JOptionPane.YES_OPTION){
     // prompt user for name and game name
     String name = JOptionPane.showInputDialog(this.frame,"Enter Name","Enter your name:");
-    String gameSaveTAG = JOptionPane.showInputDialog(this.frame,"Enter Tag","Enter a Tag for this Game:");
+    String gameSaveTag = JOptionPane.showInputDialog(this.frame,"Enter Tag","Enter a Tag for this Game:");
+    if (name != "" && gameSaveTag != ""){ // avoid empty names for input
+      try{ // save game
 
-    try{ // save game
+        MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
+        myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTag));
 
-      MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
-      myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTAG));
+      }catch(IOException ioe){ ioe.printStackTrace(); }
 
-    }catch(IOException ioe){ ioe.printStackTrace(); }
+      try{ // save high score
 
-    try{ // save high score
-      HighScoreSaver mySaver = new HighScoreSaver("HighScores.ser");
-      mySaver.addHighScoreToList(new MazeHighScore(name,realTime,settings.rows,settings.cols));
+        HighScoreSaver mySaver = new HighScoreSaver("HighScores.ser");
+        mySaver.addHighScoreToList(new MazeHighScore(name,realTime,settings.rows,settings.cols));
 
-    }catch(IOException ioe){ ioe.printStackTrace(); }
-
+      }catch(IOException ioe){ ioe.printStackTrace(); }
+    }
     this.player=null;
   }
 }

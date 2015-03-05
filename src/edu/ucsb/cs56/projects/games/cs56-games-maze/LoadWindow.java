@@ -25,9 +25,11 @@ public class LoadWindow {
   private ArrayList<MazeGameSave> currentlySavedGames;
   private MazeGameSaver myGameSaver;
   private int NumberOfSavedGames;
+  private MazeGui operatableGUI;
 
-  public LoadWindow() throws IOException{
+  public LoadWindow(MazeGui gameGui) throws IOException{
 
+    operatableGUI = gameGui; // get a ref to the curent GUI
     // load the saved games into ArrayList
     try{
       myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
@@ -44,11 +46,10 @@ public class LoadWindow {
     frame.setVisible(true);
     frame.setSize(175,500);
     frame.setResizable(false);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     // Diplay the Saved Games for User to choose from on a panel
 
-    JPanel mainPanel = new JPanel(); // panel to store all the buttons (each has a game)
+    JPanel mainPanel = new JPanel(); // panel to store all the buttons
 
     JButton[] checkBoxList = new JButton[NumberOfSavedGames];
     for(int i=0; i<NumberOfSavedGames; i++)
@@ -71,6 +72,7 @@ public class LoadWindow {
         String saveTagName = e.getActionCommand();
         MazeGameSave specifiedGame = myGameSaver.SearchForSavedGame(saveTagName);
         if (specifiedGame != null) System.out.println(">> GameFound <<");
+        operatableGUI.newMaze(specifiedGame);
       }
     }
   }; // end of listener
