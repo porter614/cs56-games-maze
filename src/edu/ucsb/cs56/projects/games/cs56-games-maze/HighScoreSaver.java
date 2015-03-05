@@ -83,10 +83,6 @@ public class HighScoreSaver{
               break; // exit while loop
           }
         }
-        // at this point, we should have an arraylist of MazeHighScore objects
-        // time to sort
-        //MazeScoreCompare mazeScoreCompare = new MazeScoreCompare();
-        //Collections.sort(savedScores,mazeScoreCompare); // sort call
 
     }catch(IOException e){
       System.err.println("read file error");
@@ -96,6 +92,24 @@ public class HighScoreSaver{
       return savedScores;
     }
 
+
+  }
+
+  public void addHighScoreToList(MazeHighScore thisScore)throws IOException{
+
+    try{
+    ArrayList<MazeHighScore> currentScoreList = new ArrayList<MazeHighScore>();
+    if (this.hasEmptyFile()==false){  // if the .ser file=empty, then don't read
+      currentScoreList = this.getHighScoreList();
+    }
+
+    currentScoreList.add(thisScore);
+    this.writeHighScoreList(currentScoreList);
+
+    System.out.println("+1 High Score Objects stored= "+currentScoreList.size());
+  }catch(IOException io){
+    io.printStackTrace();
+  }
 
   }
 

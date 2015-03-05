@@ -435,16 +435,8 @@ public class MazeGui implements ActionListener{
     }catch(IOException ioe){ ioe.printStackTrace(); }
 
     try{ // save high score
-      HighScoreSaver mySaver = new HighScoreSaver("HighScores.ser"); // CTOR
-
-      ArrayList<MazeHighScore> currentScoreList = new ArrayList<MazeHighScore>();
-      if (mySaver.hasEmptyFile()==false)  // if the .ser file=empty, then don't read
-      currentScoreList = mySaver.getHighScoreList();
-
-      currentScoreList.add(new MazeHighScore(name,realTime,settings.rows,settings.cols));
-      mySaver.writeHighScoreList(currentScoreList);
-
-      System.out.println("+1 High Score Objects stored= "+currentScoreList.size());
+      HighScoreSaver mySaver = new HighScoreSaver("HighScores.ser");
+      mySaver.addHighScoreToList(new MazeHighScore(name,realTime,settings.rows,settings.cols));
 
     }catch(IOException ioe){ ioe.printStackTrace(); }
 
