@@ -51,7 +51,8 @@ public class MazeGui implements ActionListener{
     public static void main(final String[] args){
 	SwingUtilities.invokeLater(new Runnable(){
 		public void run(){
-		    new MazeGui(args).run();
+		    MazeGui myMazeGui = new MazeGui(args);
+        myMazeGui.run();
 		}
 	    });
     }
@@ -161,13 +162,7 @@ public class MazeGui implements ActionListener{
 	//init settings Dialog
 	settingsDialog = new MazeSettingsDialog(settings, this);
 	settingsDialog.setLocationRelativeTo(frame);
-  /*
-	//init file chooser window
-	fc = new JFileChooser();
-	fileFilter = new FileNameExtensionFilter("MazeGame saves (*.mzgs)", "mzgs");
-	fc.addChoosableFileFilter(fileFilter);
-	fc.setFileFilter(fileFilter);
-  */
+
     }
 
 
@@ -401,9 +396,11 @@ public class MazeGui implements ActionListener{
     // prompt user to select what game they want, check if it is a completed maze or not
     // load the maze grid and such based on if they will be competing against a past score
     // or completing a previous maze
-
-    LoadWindow myLoadWindow = new LoadWindow();
-
+    try{
+      LoadWindow myLoadWindow = new LoadWindow();
+    }catch(IOException E){
+      E.printStackTrace();
+    }
 
 
 

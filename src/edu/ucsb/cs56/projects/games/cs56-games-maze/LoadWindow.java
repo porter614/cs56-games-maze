@@ -19,26 +19,62 @@ import java.util.Collections;
 Class for creating a Load window and taking user input
 @author Zak Blake
 */
-public class LoadWindow{
+public class LoadWindow {
 
   private boolean emptyFile = false;
   private ArrayList<MazeGameSave> currentlySavedGames;
   private MazeGameSaver myGameSaver;
+  private int NumberOfSavedGames;
 
-  public LoadWindow(){
+  public LoadWindow() throws IOException{
+
+    // load the saved games into ArrayList
+    try{
+      myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
+      currentlySavedGames = myGameSaver.getSavedGameList();
+    }catch(IOException e){
+      e.printStackTrace();
+    }
+    // extract number of saved games
+    NumberOfSavedGames= currentlySavedGames.size();
+    System.out.println("Number of Games Loaded = "+NumberOfSavedGames);
+
     // set up the frame
     JFrame frame = new JFrame("GameLoad");
     frame.setVisible(true);
-    frame.setSize(300,500);
-    Button loadButton = new Button("load");
-    frame.getContentPane().add(BorderLayout.NORTH,loadButton);
+    frame.setSize(175,500);
+    frame.setResizable(false);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    
+    // Diplay the Saved Games for User to choose from on a panel
 
+    JPanel mainPanel = new JPanel(); // panel to store all the buttons (each has a game)
 
-
+    JButton[] checkBoxList = new JButton[NumberOfSavedGames];
+    for(int i=0; i<NumberOfSavedGames; i++)
+    {
+      String currentTag = currentlySavedGames.get(i).getSaveTag();
+      checkBoxList[i] = new JButton(currentTag);
+      checkBoxList[i].addActionListener(listener);
+      mainPanel.add(checkBoxList[i]);
+    }
+    frame.getContentPane().add(BorderLayout.CENTER,mainPanel);
 
   }
+
+
+  // listener to use button input to
+  ActionListener listener = new ActionListener(){
+    @Override
+    public void actionPerformed(ActionEvent e){
+      if (e.getSource() instanceof JButton){
+        String saveTagName = e.getActionCommand();
+        MazeGameSave specifiedGame = myGameSaver.SearchForSavedGame(saveTagName);
+        if (specifiedGame != null) System.out.println(">> GameFound <<");
+      }
+    }
+  }; // end of listener
+
 
 
 }

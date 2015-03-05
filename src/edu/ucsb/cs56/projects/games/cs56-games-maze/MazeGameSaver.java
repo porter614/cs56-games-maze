@@ -29,6 +29,17 @@ public class MazeGameSaver{
   MazeGameSaver(String filename){
     myFile = new File(filename);
   }
+  // search the arraylist for a MazeSaveGame by saveTag
+  public MazeGameSave SearchForSavedGame(String desiredMazeSaveTag){
+    for (MazeGameSave thisGame:savedMazeGames){
+      System.out.println("Searching: comparing "+desiredMazeSaveTag+" to "+thisGame.getSaveTag());
+      if (desiredMazeSaveTag == thisGame.getSaveTag()){
+        System.out.println("Search was successful");
+        return thisGame;
+      }
+    }
+    return null;
+  }
 
   // pass this function an arraylist to
   public boolean writeGameListToFile(ArrayList<MazeGameSave> myGameList) throws IOException{

@@ -20,7 +20,7 @@ public class MazeGameSave implements Serializable{
     private MazePlayer player;
     private long timeElapsed;
     private MazeHighScore currentMazeHighScore;
-    private String storageTag;
+    private String storageTag="";
 
 
     /** Constructor for save game object, player moved back to start, use for win state
@@ -63,6 +63,9 @@ public class MazeGameSave implements Serializable{
   this.storageTag= sTag;
     }
 
+
+
+
     public boolean hasHighScores()
     {
       if (this.currentMazeHighScore.getName() == "")
@@ -75,6 +78,9 @@ public class MazeGameSave implements Serializable{
       }
     }
 
+    public String getSaveTag(){
+      return this.storageTag;
+    }
 
     /**
        @return MazeGrid object representing layout/state of maze
