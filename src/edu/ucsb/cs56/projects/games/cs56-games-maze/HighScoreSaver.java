@@ -39,8 +39,9 @@ public class HighScoreSaver{
         oso.writeObject(thisScore);
         }
     }catch(IOException e){
-        e.printStackTrace();
-      return false;
+          System.out.println("write file error");
+          e.printStackTrace();
+          return false;
       }finally{
           oso.close();
           return true;
@@ -48,11 +49,10 @@ public class HighScoreSaver{
 
   }
 
-  // check if the file is empty to avoid trying to read from an empty file
   public boolean hasEmptyFile(){
     if (myFile==null)
       {
-        System.err.println("*****NULL file");
+        System.err.println("**NULL file");
         return false;
       }
     if (myFile.length()!=0) return false;
@@ -65,6 +65,7 @@ public class HighScoreSaver{
     MazeHighScore tempHighScore;
     FileInputStream instream = null;
     ObjectInputStream osi = null;
+
 
     try{
       System.out.println(">BEGIN");

@@ -29,6 +29,13 @@ public class MazeHighScore implements Serializable, Comparable<MazeHighScore>{
     this.rows=rows;
     this.cols=columns;
     }
+    /**
+    Constructor for basic high score
+    */
+    public MazeHighScore(String name){
+      this.name = name;
+    }
+
 
     /** @return Name associated with the high score */
     public String getName(){

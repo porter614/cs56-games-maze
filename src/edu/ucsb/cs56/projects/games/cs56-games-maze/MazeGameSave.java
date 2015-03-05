@@ -19,7 +19,7 @@ public class MazeGameSave implements Serializable{
     private MazeSettings settings;
     private MazePlayer player;
     private long timeElapsed;
-    private ArrayList<MazeHighScore> scores;
+    private MazeHighScore currentMazeHighScore;
     private String storageTag;
 
 
@@ -43,7 +43,7 @@ public class MazeGameSave implements Serializable{
       this.grid = grid;
       this.settings = settings;
       this.player = player;
-      this.scores = new ArrayList<MazeHighScore>();
+      this.currentMazeHighScore = new MazeHighScore("");
       this.timeElapsed=timeElapsed;
     }
     /** Constructor for save game object, stores player position
@@ -58,18 +58,23 @@ public class MazeGameSave implements Serializable{
 	this.grid = grid;
 	this.settings = settings;
 	this.player = player;
-	this.scores = new ArrayList<MazeHighScore>();
-	this.timeElapsed=timeElapsed;
+  this.currentMazeHighScore = new MazeHighScore(""); // create a high score with no name as a place holder
+  this.timeElapsed=timeElapsed;
   this.storageTag= sTag;
     }
 
-    /** Adds a new score for this maze, then resorts array of scores so high score always on top
-	@param s Score to add to this save game
-     */
-    public void addHighScore(MazeHighScore s){
-	this.scores.add(s);
-	Collections.sort(this.scores);
+    public boolean hasHighScores()
+    {
+      if (this.currentMazeHighScore.getName() == "")
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
     }
+
 
     /**
        @return MazeGrid object representing layout/state of maze
@@ -92,21 +97,11 @@ public class MazeGameSave implements Serializable{
 	return this.settings;
     }
 
-    /** check whether there are any high scores associated with this game
-	@return whether any high scores saved
-     */
-    public boolean hasHighScores(){
-	return this.scores.size()>0;
-    }
-
     /**
        @return MazeHighScore representing highest score saved in this file
      */
     public MazeHighScore getHighScore(){
-	if(this.scores.size()>0)
-	    return this.scores.get(0);
-	else
-	    return null;
+	     return this.currentMazeHighScore;
     }
 
     /**
@@ -122,6 +117,17 @@ public class MazeGameSave implements Serializable{
      */
     public void setTimeElapsed(long elapsed){
 	this.timeElapsed=elapsed;
+    }
+    // compare score achieved on this maze to current score and change if needed
+    public boolean checkSetNewMazeHighScore(MazeHighScore newHS){
+        // check if a) there is no previous score saved or b) the new score is better
+      if (this.currentMazeHighScore.getName() == "" || newHS.getTime() < this.currentMazeHighScore.getTime()){
+        this.currentMazeHighScore = newHS;
+        return true;
+      }
+      else{
+        return false;
+      }
     }
 
     /**
