@@ -21,6 +21,7 @@ public class MazeGameSave implements Serializable{
     private long timeElapsed;
     private MazeHighScore currentMazeHighScore=null;
     private String storageTag="";
+    private boolean completed=false;
 
 
     /** Constructor for save game object, player moved back to start, use for win state
@@ -135,7 +136,12 @@ public class MazeGameSave implements Serializable{
         return false;
       }
     }
-
+    public boolean isCompleted(){
+      return this.completed;
+    }
+    public void setCompleted(boolean b){
+      this.completed = b;
+    }
     /**
        Resets player position to maze start as per settings
      */

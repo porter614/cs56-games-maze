@@ -317,6 +317,13 @@ public class MazeGui implements ActionListener{
 	    newMaze();
 	}
 	else{
+    // create a newMaze based on save game object
+      if (game.isCompleted()==false){ // if the player is continuing a game
+
+      }
+      else{ // if the game has already been finished > player trying for new HS
+
+      }
 	    timerBar.stopTimer();
 	    frame.remove(mc);
 	    this.settings=game.getSettings();
@@ -380,7 +387,9 @@ public class MazeGui implements ActionListener{
     // Save Game to .ser file
     try{
     MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
-    myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTAG));
+    MazeGameSave curGame = new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTAG);
+    curGame.setCompleted(false);
+    myGameSaver.AddGameSaveToList(curGame);
 
 
     }catch( IOException Ex){ Ex.printStackTrace();}
@@ -429,7 +438,9 @@ public class MazeGui implements ActionListener{
       try{ // save game
 
         MazeGameSaver myGameSaver = new MazeGameSaver("StoredGameSaves.ser");
-        myGameSaver.AddGameSaveToList(new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTag));
+        MazeGameSave thisGame = new MazeGameSave(this.grid,this.oldSettings,this.player,realTime,gameSaveTag);
+        thisGame.setCompleted(true);
+        myGameSaver.AddGameSaveToList(thisGame);
 
       }catch(IOException ioe){ ioe.printStackTrace(); }
 
