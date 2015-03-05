@@ -398,8 +398,11 @@ public class MazeGui implements ActionListener{
   }
 	else if("load".equals(e.getActionCommand())){
     // if user selects to load game
+    // prompt user to select what game they want, check if it is a completed maze or not
+    // load the maze grid and such based on if they will be competing against a past score
+    // or completing a previous maze
 
-
+    LoadWindow myLoadWindow = new LoadWindow();
 
 
 
